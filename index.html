@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="search">
+            <input onchange="cityChange()" id="cityInput" type="text" placeholder="enter city name" spellcheck="false">
+            <button class="Search-city" onclick="cityChange()">
+                <img src="./Images/search.png" alt="search">
+            </button>
+        </div>
+        <div class="current-weather-img">
+            <img id="weather-ic" src="Images/clear.png" alt="clear">
+        </div>
+        <div class="weather-temperature">
+            <h2 id="Temperature">7</h2> <span>°C</span>
+        </div>
+        <div class="country-name">
+            <h3 id="countryName">New York</h3>
+        </div>
+        <div class="humidity-wind-wrapper">
+            <div class="humidity-wrapper">
+                <img src="./Images/humidity.png" alt="humidity">
+                <div class="humidity-inner">
+                    <h3 id="humidity">48%</h3>
+                    <p>Humidity</p>
+                </div>
+            </div>
+            <div class="wind-wrapper">
+                <img src="./Images/wind.png" alt="wind">
+                <div class="wind-inner">
+                    <h3 id="windSpeed">10.29 km/h</h3>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wetherIcon = document.getElementById('weather-ic');
+        const apiKey = "4d8fb5b93d4af21d66a2948710284366";
+        function cityChange(){
+            var x = document.getElementById("cityInput").value;
+            let fetchRes = fetch(`https://api.openweathermap.org/data/2.5/weather?q=${x}&appid=${apiKey}`);
+            const alldata = fetchRes.then(res => res.json()).then(d => {
+                document.getElementById('countryName').innerHTML = d.name;
+                document.getElementById('Temperature').innerHTML = Math.round(d.main.temp) ;
+                document.getElementById('humidity').innerHTML = d.main.humidity +"" + "%";
+                document.getElementById('windSpeed').innerHTML= d.wind.speed + " " + "km/h";
+
+                if(d.weather[0].main == "Clear"){
+                    wetherIcon.src = "Images/clear.png"
+                }
+                else if(d.weather[0].main == "Clouds"){
+                    wetherIcon.src = "Images/clouds.png"
+                }
+                else if(d.weather[0].main == "Drizzle"){
+                    wetherIcon.src = "Images/drizzle.png"
+                }
+                else if(d.weather[0].main == "Mist"){
+                    wetherIcon.src = "Images/mist.png"
+                }
+                else if(d.weather[0].main == "Rain"){
+                    wetherIcon.src = "Images/rain.png"
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
